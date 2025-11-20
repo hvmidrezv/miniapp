@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+
+  miniapp-database:
+    image: mysql:8.0
+    ports:
+      - "3308:3306"
+    container_name: miniapp-database
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    environment:
+      MYSQL_ROOT_PASSWORD: miniappRoo7t0lk2o20
+      MYSQL_DATABASE: miniapp_db
+      MYSQL_USER: miniapp
+      MYSQL_PASSWORD: miniappt0lk2o20
+
+
+volumes:
+  dbdata:
