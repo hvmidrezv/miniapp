@@ -10,7 +10,25 @@ import (
 	"github.com/hvmidrezv/miniapp/internal/routes"
 	"github.com/hvmidrezv/miniapp/internal/services"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title Mini App API
+// @version 1.0
+// @description REST API for User and Task Management
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @BasePath /
+// @schemes http
 
 func main() {
 	// load .env params
@@ -38,6 +56,9 @@ func main() {
 
 	// setup routes
 	routes.SetupRoutes(router, userHandler, taskHandler)
+
+	// swagger docs
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// server
 	port := ":8080"
