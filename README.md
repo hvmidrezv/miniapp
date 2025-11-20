@@ -8,24 +8,6 @@
 
 A lightweight RESTful API built with Go (Golang) for managing users and tasks. This project demonstrates clean architecture principles, following best practices for building scalable backend applications.
 
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Running the Application](#-running-the-application)
-- [Database Migrations](#-database-migrations)
-- [API Documentation](#-api-documentation)
-- [API Endpoints](#-api-endpoints)
-- [Usage Examples](#-usage-examples)
-- [Development](#-development)
-- [Testing](#-testing)
-- [Docker Support](#-docker-support)
-- [Contributing](#-contributing)
-- [License](#-license)
 
 ## ✨ Features
 
@@ -141,7 +123,7 @@ go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
 go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-```
+
 
 ## ⚙️ Configuration
 
