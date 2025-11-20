@@ -1,4 +1,76 @@
 basePath: /
+definitions:
+  dto.CreateTaskRequest:
+    properties:
+      status:
+        enum:
+        - pending
+        - done
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - title
+    - user_id
+    type: object
+  dto.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  dto.UpdateTaskRequest:
+    properties:
+      status:
+        enum:
+        - pending
+        - done
+        type: string
+      title:
+        type: string
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  utils.PaginatedResponse:
+    properties:
+      data: {}
+      meta:
+        $ref: '#/definitions/utils.Pagination'
+      success:
+        type: boolean
+    type: object
+  utils.Pagination:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  utils.Response:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -12,7 +84,346 @@ info:
   termsOfService: http://swagger.io/terms/
   title: Mini App API
   version: "1.0"
-paths: {}
+paths:
+  /api/tasks:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of all tasks with optional status filter
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Filter by status
+        enum:
+        - pending
+        - done
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: List all tasks with pagination and filtering
+      tags:
+      - Tasks
+    post:
+      consumes:
+      - application/json
+      description: Create a new task with title and user_id validation
+      parameters:
+      - description: Task data
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Create task for a user
+      tags:
+      - Tasks
+  /api/tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Delete task
+      tags:
+      - Tasks
+    get:
+      consumes:
+      - application/json
+      description: Get a specific task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get single task
+      tags:
+      - Tasks
+    put:
+      consumes:
+      - application/json
+      description: Update task's title and/or status (pending or done)
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Task data
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Update task title or status
+      tags:
+      - Tasks
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of all users
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.PaginatedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: List all users with pagination
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with name and email validation
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Create a new user
+      tags:
+      - Users
+  /api/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user and all their associated tasks (cascade delete)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Delete user
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Get a specific user by ID with all their associated tasks
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Get single user with their tasks
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update user's name and/or email
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Update user
+      tags:
+      - Users
 schemes:
 - http
 swagger: "2.0"

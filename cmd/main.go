@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/hvmidrezv/miniapp/docs"
 	"github.com/hvmidrezv/miniapp/internal/config"
 	"github.com/hvmidrezv/miniapp/internal/handlers"
 	"github.com/hvmidrezv/miniapp/internal/repositories"
