@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/hvmidrezv/miniapp/docs"
 	"github.com/hvmidrezv/miniapp/internal/config"
@@ -27,9 +28,9 @@ import (
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 
-// @host localhost:8080
+// @host miniapplianassignment.liara.run
 // @BasePath /
-// @schemes http
+// @schemes https http
 
 func main() {
 	// load .env params
@@ -54,6 +55,16 @@ func main() {
 
 	//  gin router
 	router := gin.Default()
+
+	// CORS configuration
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: false,
+		MaxAge:           12 * 3600,
+	}))
 
 	// setup routes
 	routes.SetupRoutes(router, userHandler, taskHandler)

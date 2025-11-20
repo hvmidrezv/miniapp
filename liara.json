@@ -1,0 +1,6 @@
+{
+  "app": "miniapp",
+  "build": {
+    "args": ["./cmd/api"]
+  }
+}

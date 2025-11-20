@@ -1,8 +1,9 @@
 module github.com/hvmidrezv/miniapp
 
-go 1.25.1
+go 1.25
 
 require (
+	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-playground/validator/v10 v10.28.0
 	github.com/go-sql-driver/mysql v1.8.1
